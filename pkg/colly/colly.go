@@ -2,6 +2,8 @@ package colly
 
 import (
 	"fmt"
+	"log"
+	"strconv"
 	"web_scraper/internal/scraping/domain/model"
 
 	"github.com/gocolly/colly"
@@ -16,11 +18,8 @@ func New(collector *colly.Collector) Colly {
 }
 
 func (c Colly) ScrapeCards(parrentClass string, itemClass string, website *model.Website) []model.Content {
-	fmt.Println("here")
 	contentOfPage := make([]model.Content, 0)
 	c.Collector.OnHTML(parrentClass, func(e *colly.HTMLElement) {
-
-		fmt.Println(*e)
 		e.ForEach(itemClass, func(i int, he *colly.HTMLElement) {
 			newContent := model.Content{
 				Title:    "",
@@ -30,14 +29,27 @@ func (c Colly) ScrapeCards(parrentClass string, itemClass string, website *model
 			}
 			for _, attr := range website.Attributes {
 				fmt.Println(attr.Name)
-				if attr.Name == "title" {
+				if attr.InAppName == "title" {
 					newContent.Title = he.ChildAttr(attr.HtmlQuery, attr.Name)
-				} else if attr.Name == "datetime" {
-					fmt.Println(he.ChildAttr(attr.HtmlQuery, attr.Name))
+				} else if attr.InAppName == "date" {
+					newContent.Date = he.ChildAttr(attr.HtmlQuery, attr.Name)
 				}
 			}
 			for _, htmlText := range website.HtmlTexts {
-				_ = htmlText
+				if htmlText.InAppName == "bull_rate" {
+					var err error
+					newContent.PosScore, err = strconv.Atoi(he.ChildText(htmlText.HtmlQuery))
+					if err != nil {
+						log.Fatalln(err)
+					}
+				} else if htmlText.InAppName == "bear_rate" {
+					var err error
+					newContent.NegScore, err = strconv.Atoi(he.ChildText(htmlText.HtmlQuery))
+					if err != nil {
+						log.Fatalln(err)
+					}
+				}
+
 			}
 			contentOfPage = append(contentOfPage, newContent)
 

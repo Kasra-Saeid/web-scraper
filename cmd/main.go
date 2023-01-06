@@ -19,13 +19,17 @@ func main() {
 	scrapingService := scraping.GetScrapingServcie()
 	website := model.NewWebsite(
 		"https://arzdigital.com/breaking/",
-		[]model.Attribute{*model.NewAttribute(".arz-breaking-news__item-link", "title"), *model.NewAttribute(".arz-breaking-news__item-link > .arz-breaking-news__container > .arz-breaking-news__info > .arz-breaking-news__publish-time > time", "datetime")},
-		[]model.HtmlText{*model.NewHtmlText(".arz-breaking-news-post__info-rating-pump.arz-breaking-news-post__info-rating-value")},
+		[]model.Attribute{*model.NewAttribute("title", ".arz-breaking-news__item-link", "title"), *model.NewAttribute("date", ".arz-breaking-news__item-link > .arz-breaking-news__container > .arz-breaking-news__info > .arz-breaking-news__publish-time > time", "datetime")},
+		[]model.HtmlText{*model.NewHtmlText("bull_rate", ".arz-breaking-news__item-link > .arz-breaking-news__container > .arz-breaking-news__info > .arz-breaking-news__rating > .arz-breaking-news-post__info-rating-pump > .arz-breaking-news-post__info-rating-pump-number > .arz-breaking-news-post__info-rating-value"),
+			*model.NewHtmlText("bear_rate", ".arz-breaking-news__item-link > .arz-breaking-news__container > .arz-breaking-news__info > .arz-breaking-news__rating > .arz-breaking-news-post__info-rating-dump > .arz-breaking-news-post__info-rating-dump-number > .arz-breaking-news-post__info-rating-value")},
 		[]int{1},
 	)
 	c := scrapingService.ScrapeCards(".arz-breaking-news__list", ".arz-breaking-news__item", website)
 
 	for _, content := range c {
 		fmt.Println(content.Title)
+		fmt.Println(content.Date)
+		fmt.Println(content.PosScore)
+		fmt.Println(content.NegScore)
 	}
 }

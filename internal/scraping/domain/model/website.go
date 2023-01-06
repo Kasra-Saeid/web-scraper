@@ -8,26 +8,30 @@ type Website struct {
 }
 
 type Attribute struct {
+	InAppName string
 	HtmlQuery string
 	Name      string
 	Text      string
 }
 
 type HtmlText struct {
+	InAppName string
 	HtmlQuery string
 	Text      string
 }
 
-func NewAttribute(htmlQuery, name string) *Attribute {
+func NewAttribute(inAppName, htmlQuery, name string) *Attribute {
 	return &Attribute{
+		InAppName: inAppName,
 		HtmlQuery: htmlQuery,
 		Name:      name,
 		Text:      "",
 	}
 }
 
-func NewHtmlText(htmlQuery string) *HtmlText {
+func NewHtmlText(inAppName, htmlQuery string) *HtmlText {
 	return &HtmlText{
+		InAppName: inAppName,
 		HtmlQuery: htmlQuery,
 		Text:      "",
 	}
