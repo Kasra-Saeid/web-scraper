@@ -28,7 +28,6 @@ func (c Colly) ScrapeCards(parrentClass string, itemClass string, website *model
 				NegScore: 0,
 			}
 			for _, attr := range website.Attributes {
-				fmt.Println(attr.Name)
 				if attr.InAppName == "title" {
 					newContent.Title = he.ChildAttr(attr.HtmlQuery, attr.Name)
 				} else if attr.InAppName == "date" {

@@ -1,9 +1,11 @@
 package scraping
 
 import (
-	collyPkg "github.com/gocolly/colly"
 	"web_scraper/internal/scraping/domain/service"
 	"web_scraper/pkg/colly"
+	"web_scraper/pkg/csv_file"
+
+	collyPkg "github.com/gocolly/colly"
 )
 
 type Scraping struct {
@@ -13,7 +15,8 @@ type Scraping struct {
 func New() Scraping {
 	collector := collyPkg.NewCollector(collyPkg.Async(true))
 	scraperPkg := colly.New(collector)
-	scrapingService := service.NewScraper(scraperPkg)
+	csvPkg := csv_file.New()
+	scrapingService := service.NewScraper(scraperPkg, csvPkg)
 	scraping := Scraping{scrapingService: scrapingService}
 	return scraping
 }

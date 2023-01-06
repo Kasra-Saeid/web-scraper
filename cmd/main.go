@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"web_scraper/internal/scraping"
 	"web_scraper/internal/scraping/domain/model"
 )
+
+// todo : add parallel scraping
 
 func makeRange(min, max int) []int {
 	a := make([]int, max-min+1)
@@ -25,11 +26,5 @@ func main() {
 		[]int{1},
 	)
 	c := scrapingService.ScrapeCards(".arz-breaking-news__list", ".arz-breaking-news__item", website)
-
-	for _, content := range c {
-		fmt.Println(content.Title)
-		fmt.Println(content.Date)
-		fmt.Println(content.PosScore)
-		fmt.Println(content.NegScore)
-	}
+	scrapingService.WriteContents(c, nil)
 }
