@@ -19,9 +19,9 @@ func main() {
 	scrapingService := scraping.GetScrapingServcie()
 	website := model.NewWebsite(
 		"https://arzdigital.com/breaking/",
-		[]model.Attribute{*model.NewAttribute(".arz-breaking-news__item-link", "title")},
+		[]model.Attribute{*model.NewAttribute(".arz-breaking-news__item-link", "title"), *model.NewAttribute(".arz-breaking-news__item-link > .arz-breaking-news__container > .arz-breaking-news__info > .arz-breaking-news__publish-time > time", "datetime")},
 		[]model.HtmlText{*model.NewHtmlText(".arz-breaking-news-post__info-rating-pump.arz-breaking-news-post__info-rating-value")},
-		makeRange(0, 720),
+		[]int{1},
 	)
 	c := scrapingService.ScrapeCards(".arz-breaking-news__list", ".arz-breaking-news__item", website)
 

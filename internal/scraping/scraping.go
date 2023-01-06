@@ -11,7 +11,7 @@ type Scraping struct {
 }
 
 func New() Scraping {
-	collector := collyPkg.NewCollector()
+	collector := collyPkg.NewCollector(collyPkg.Async(true))
 	scraperPkg := colly.New(collector)
 	scrapingService := service.NewScraper(scraperPkg)
 	scraping := Scraping{scrapingService: scrapingService}
