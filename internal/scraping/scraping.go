@@ -13,7 +13,7 @@ type Scraping struct {
 }
 
 func New() Scraping {
-	collector := collyPkg.NewCollector(collyPkg.Async(true))
+	collector := collyPkg.NewCollector(colly.AddRandomAgent(colly.RandomAgent), colly.DoParallel(20))
 	scraperPkg := colly.New(collector)
 	csvPkg := csv_file.New()
 	scrapingService := service.NewScraper(scraperPkg, csvPkg)
